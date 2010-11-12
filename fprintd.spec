@@ -23,11 +23,24 @@ Daemon to offer libfprint functionality over D-Bus.
 %description -l pl.UTF-8
 Demon oferujący funkcjonalność libfprint poprzez D-Bus.
 
+%package -n pam-pam_fprintd
+Summary:	PAM module for fingerprint authentication
+Summary(pl.UTF-8):	Moduł PAM do uwierzytelniania odciskiem palca
+Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
+
+%description -n pam-pam_fprintd
+PAM module for fingerprint authentication.
+
+%description -n pam-pam_fprintd -l pl.UTF-8
+Moduł PAM do uwierzytelniania odciskiem palca.
+
 %prep
 %setup -q
 
 %build
-%configure
+%configure \
+	--disable-static
 
 %{__make} \
 	pammoddir=/%{_lib}/security
@@ -52,10 +65,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/fprintd-list
 %attr(755,root,root) %{_bindir}/fprintd-verify
 %attr(755,root,root) %{_libdir}/fprintd
-%attr(755,root,root) /%{_lib}/security/pam_fprintd.so
 %{_datadir}/dbus-1/interfaces/net.reactivated.Fprint.*.xml
 %{_datadir}/dbus-1/system-services/net.reactivated.Fprint.service
 %{_datadir}/polkit-1/actions/net.reactivated.fprint.device.policy
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/fprintd.conf
 /etc/dbus-1/system.d/net.reactivated.Fprint.conf
 %{_mandir}/man1/fprintd.1*
+
+%files -n pam-pam_fprintd
+%defattr(644,root,root,755)
+%doc pam/README
+%attr(755,root,root) /%{_lib}/security/pam_fprintd.so
