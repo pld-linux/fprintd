@@ -13,12 +13,17 @@ Source0:	http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.bz2
 # Source0-md5:	d6f023e6560d5647eadf668cdbcee57a
 Patch0:		dont-ever-unload.patch
 URL:		http://www.reactivated.net/fprint/wiki/Fprintd
+BuildRequires:	autoconf
 BuildRequires:	dbus-glib-devel
+%{?with_apidocs:BuildRequires:	docbook-dtd412-xml}
+BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 2.0.0
 %{?with_apidocs:BuildRequires:  gtk-doc}
+BuildRequires:	intltool
 BuildRequires:	libfprint-devel >= 0.1.0
-BuildRequires:	libxslt-progs
+%{?with_apidocs:BuildRequires:	libxslt-progs}
 BuildRequires:	pam-devel
+BuildRequires:	perl-tools-pod
 BuildRequires:	pkgconfig
 BuildRequires:	polkit-devel >= 0.91
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -104,5 +109,5 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%{_gtkdocdir}
+%{_gtkdocdir}/fprintd
 %endif
