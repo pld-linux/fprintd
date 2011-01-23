@@ -6,7 +6,7 @@ Summary:	Daemon to offer libfprint functionality over D-Bus
 Summary(pl.UTF-8):	Demon oferujący funkcjonalność libfprint poprzez D-Bus
 Name:		fprintd
 Version:	0.2.0
-Release:	2
+Release:	3
 License:	GPL v2+
 Group:		Libraries
 Source0:	http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.bz2
@@ -34,7 +34,7 @@ Summary:	fprintd API documentation
 Summary(pl.UTF-8):	Dokumentacja API biblioteki fprintd
 License:	GFDL v1.1+
 Group:		Documentation
-Requires:	gtk-doc
+Requires:	gtk-doc-common
 
 %description apidocs
 API and internal documentation for fprintd library.
@@ -60,7 +60,7 @@ Moduł PAM do uwierzytelniania odciskiem palca.
 
 %build
 %configure \
-	%{?with_apidocs:--enable-gtk-doc} \
+	%{?with_apidocs:--enable-gtk-doc --with-html-dir=%{_gtkdocdir}} \
 	--disable-static
 
 %{__make} \
@@ -104,5 +104,5 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%{_datadir}/gtk-doc/html/fprintd
+%{_gtkdocdir}
 %endif
