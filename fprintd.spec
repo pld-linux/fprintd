@@ -5,13 +5,12 @@
 Summary:	Daemon to offer libfprint functionality over D-Bus
 Summary(pl.UTF-8):	Demon oferujący funkcjonalność libfprint poprzez D-Bus
 Name:		fprintd
-Version:	0.2.0
-Release:	4
+Version:	0.4.1
+Release:	1
 License:	GPL v2+
 Group:		Libraries
 Source0:	http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.bz2
-# Source0-md5:	d6f023e6560d5647eadf668cdbcee57a
-Patch0:		dont-ever-unload.patch
+# Source0-md5:	021844be151c0cb22d0c1624233b7780
 URL:		http://www.reactivated.net/fprint/wiki/Fprintd
 BuildRequires:	autoconf
 BuildRequires:	dbus-glib-devel
@@ -20,7 +19,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 2.0.0
 %{?with_apidocs:BuildRequires:  gtk-doc}
 BuildRequires:	intltool
-BuildRequires:	libfprint-devel >= 0.1.0
+BuildRequires:	libfprint-devel >= 0.4.0
 %{?with_apidocs:BuildRequires:	libxslt-progs}
 BuildRequires:	pam-devel
 BuildRequires:	perl-tools-pod
@@ -61,7 +60,6 @@ Moduł PAM do uwierzytelniania odciskiem palca.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %configure \
@@ -80,13 +78,15 @@ install -d $RPM_BUILD_ROOT/var/lib/fprint
 
 %{__rm} $RPM_BUILD_ROOT/%{_lib}/security/pam_fprintd.la
 
+%find_lang %{name}
+
 # to -devel, but we haven't any
 rm $RPM_BUILD_ROOT%{_datadir}/dbus-1/interfaces/net.reactivated.Fprint.*.xml
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS NEWS README TODO
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/fprintd.conf
