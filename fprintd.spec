@@ -16,8 +16,8 @@ BuildRequires:	autoconf
 BuildRequires:	dbus-glib-devel
 %{?with_apidocs:BuildRequires:	docbook-dtd412-xml}
 BuildRequires:	gettext-devel
-BuildRequires:	glib2-devel >= 2.0.0
-%{?with_apidocs:BuildRequires:  gtk-doc}
+BuildRequires:	glib2-devel >= 1:2.26.0
+%{?with_apidocs:BuildRequires:  gtk-doc >= 1.3}
 BuildRequires:	intltool
 BuildRequires:	libfprint-devel >= 0.4.0
 %{?with_apidocs:BuildRequires:	libxslt-progs}
@@ -63,8 +63,9 @@ Moduł PAM do uwierzytelniania odciskiem palca.
 
 %build
 %configure \
-	%{?with_apidocs:--enable-gtk-doc --with-html-dir=%{_gtkdocdir}} \
-	--disable-static
+	--disable-silent-rules \
+	--disable-static \
+	%{?with_apidocs:--enable-gtk-doc --with-html-dir=%{_gtkdocdir}}
 
 %{__make} \
 	pammoddir=/%{_lib}/security
@@ -78,10 +79,10 @@ install -d $RPM_BUILD_ROOT/var/lib/fprint
 
 %{__rm} $RPM_BUILD_ROOT/%{_lib}/security/pam_fprintd.la
 
-%find_lang %{name}
-
 # to -devel, but we haven't any
-rm $RPM_BUILD_ROOT%{_datadir}/dbus-1/interfaces/net.reactivated.Fprint.*.xml
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/dbus-1/interfaces/net.reactivated.Fprint.*.xml
+
+%find_lang %{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
