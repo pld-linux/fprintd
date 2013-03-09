@@ -1,3 +1,4 @@
+# TODO: systemd post/preun
 #
 # Conditional build:
 %bcond_without	apidocs		# do not build and package API docs
@@ -5,26 +6,28 @@
 Summary:	Daemon to offer libfprint functionality over D-Bus
 Summary(pl.UTF-8):	Demon oferujący funkcjonalność libfprint poprzez D-Bus
 Name:		fprintd
-Version:	0.4.1
-Release:	2
+Version:	0.5.0
+Release:	1
 License:	GPL v2+
 Group:		Libraries
 Source0:	http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.bz2
-# Source0-md5:	021844be151c0cb22d0c1624233b7780
+# Source0-md5:	74cff28ed2b6b72453fbc4465761a114
 URL:		http://www.reactivated.net/fprint/wiki/Fprintd
-BuildRequires:	autoconf
 BuildRequires:	dbus-glib-devel
 %{?with_apidocs:BuildRequires:	docbook-dtd412-xml}
 BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 1:2.26.0
 %{?with_apidocs:BuildRequires:  gtk-doc >= 1.3}
-BuildRequires:	intltool
-BuildRequires:	libfprint-devel >= 0.4.0
+BuildRequires:	intltool >= 0.35.0
+BuildRequires:	libfprint-devel >= 0.5.0
 %{?with_apidocs:BuildRequires:	libxslt-progs}
 BuildRequires:	pam-devel
 BuildRequires:	perl-tools-pod
 BuildRequires:	pkgconfig
 BuildRequires:	polkit-devel >= 0.91
+BuildRequires:	rpmbuild(macros) >= 1.644
+Requires:	libfprint >= 0.5.0
+Requires:	systemd-units >= 38
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -82,6 +85,9 @@ install -d $RPM_BUILD_ROOT/var/lib/fprint
 # to -devel, but we haven't any
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/dbus-1/interfaces/net.reactivated.Fprint.*.xml
 
+%{__mv} $RPM_BUILD_ROOT%{_datadir}/locale/{bg_BG,bg}
+%{__mv} $RPM_BUILD_ROOT%{_datadir}/locale/{fa_IR,fa}
+
 %find_lang %{name}
 
 %clean
@@ -96,9 +102,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/fprintd-list
 %attr(755,root,root) %{_bindir}/fprintd-verify
 %attr(755,root,root) %{_libdir}/fprintd
+/etc/dbus-1/system.d/net.reactivated.Fprint.conf
 %{_datadir}/dbus-1/system-services/net.reactivated.Fprint.service
 %{_datadir}/polkit-1/actions/net.reactivated.fprint.device.policy
-/etc/dbus-1/system.d/net.reactivated.Fprint.conf
+%{systemdunitdir}/fprintd.service
 %{_mandir}/man1/fprintd.1*
 %dir %attr(700,root,root) /var/lib/fprint
 
