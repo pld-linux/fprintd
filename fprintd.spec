@@ -6,12 +6,13 @@
 Summary:	Daemon to offer libfprint functionality over D-Bus
 Summary(pl.UTF-8):	Demon oferujący funkcjonalność libfprint poprzez D-Bus
 Name:		fprintd
-Version:	0.5.0
+Version:	0.5.1
 Release:	1
 License:	GPL v2+
 Group:		Libraries
-Source0:	http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.bz2
-# Source0-md5:	74cff28ed2b6b72453fbc4465761a114
+Source0:	http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.xz
+# Source0-md5:	e9b40ab0298a50d28b6af728e2a40a1b
+Patch0:		%{name}-pod.patch
 URL:		http://www.reactivated.net/fprint/wiki/Fprintd
 BuildRequires:	dbus-glib-devel
 %{?with_apidocs:BuildRequires:	docbook-dtd412-xml}
@@ -26,6 +27,8 @@ BuildRequires:	perl-tools-pod
 BuildRequires:	pkgconfig
 BuildRequires:	polkit-devel >= 0.91
 BuildRequires:	rpmbuild(macros) >= 1.644
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 Requires:	libfprint >= 0.5.0
 Requires:	systemd-units >= 38
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -63,6 +66,7 @@ Moduł PAM do uwierzytelniania odciskiem palca.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %configure \
