@@ -7,7 +7,7 @@ Summary:	Daemon to offer libfprint functionality over D-Bus
 Summary(pl.UTF-8):	Demon oferujący funkcjonalność libfprint poprzez D-Bus
 Name:		fprintd
 Version:	0.5.1
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Libraries
 Source0:	http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.xz
@@ -18,7 +18,7 @@ BuildRequires:	dbus-glib-devel
 %{?with_apidocs:BuildRequires:	docbook-dtd412-xml}
 BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 1:2.26.0
-%{?with_apidocs:BuildRequires:  gtk-doc >= 1.3}
+%{?with_apidocs:BuildRequires:	gtk-doc >= 1.3}
 BuildRequires:	intltool >= 0.35.0
 BuildRequires:	libfprint-devel >= 0.5.0
 %{?with_apidocs:BuildRequires:	libxslt-progs}
@@ -45,6 +45,9 @@ Summary(pl.UTF-8):	Dokumentacja API biblioteki fprintd
 License:	GFDL v1.1+
 Group:		Documentation
 Requires:	gtk-doc-common
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description apidocs
 API and internal documentation for fprintd library.
@@ -89,8 +92,8 @@ install -d $RPM_BUILD_ROOT/var/lib/fprint
 # to -devel, but we haven't any
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/dbus-1/interfaces/net.reactivated.Fprint.*.xml
 
-%{__mv} $RPM_BUILD_ROOT%{_datadir}/locale/{bg_BG,bg}
-%{__mv} $RPM_BUILD_ROOT%{_datadir}/locale/{fa_IR,fa}
+%{__mv} $RPM_BUILD_ROOT%{_localedir}/{bg_BG,bg}
+%{__mv} $RPM_BUILD_ROOT%{_localedir}/{fa_IR,fa}
 
 %find_lang %{name}
 
