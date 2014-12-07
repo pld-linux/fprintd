@@ -7,7 +7,7 @@ Summary:	Daemon to offer libfprint functionality over D-Bus
 Summary(pl.UTF-8):	Demon oferujący funkcjonalność libfprint poprzez D-Bus
 Name:		fprintd
 Version:	0.5.1
-Release:	2
+Release:	3
 License:	GPL v2+
 Group:		Libraries
 Source0:	http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.xz
