@@ -16,7 +16,7 @@ Patch0:		%{name}-pod.patch
 URL:		http://www.reactivated.net/fprint/wiki/Fprintd
 BuildRequires:	dbus-glib-devel
 %{?with_apidocs:BuildRequires:	docbook-dtd412-xml}
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel >= 1:2.26.0
 %{?with_apidocs:BuildRequires:	gtk-doc >= 1.3}
 BuildRequires:	intltool >= 0.35.0
