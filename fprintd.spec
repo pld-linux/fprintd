@@ -6,13 +6,12 @@
 Summary:	Daemon to offer libfprint functionality over D-Bus
 Summary(pl.UTF-8):	Demon oferujący funkcjonalność libfprint poprzez D-Bus
 Name:		fprintd
-Version:	0.5.1
-Release:	3
+Version:	0.6.0
+Release:	1
 License:	GPL v2+
 Group:		Libraries
 Source0:	http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.xz
-# Source0-md5:	e9b40ab0298a50d28b6af728e2a40a1b
-Patch0:		%{name}-pod.patch
+# Source0-md5:	ca61f22513a25020bea7bb96d4322c9d
 URL:		http://www.reactivated.net/fprint/wiki/Fprintd
 BuildRequires:	dbus-glib-devel
 %{?with_apidocs:BuildRequires:	docbook-dtd412-xml}
@@ -20,7 +19,8 @@ BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel >= 1:2.26.0
 %{?with_apidocs:BuildRequires:	gtk-doc >= 1.3}
 BuildRequires:	intltool >= 0.35.0
-BuildRequires:	libfprint-devel >= 0.5.0
+BuildRequires:	libfprint-devel >= 0.6.0
+%{?with_apidocs:BuildRequires:	libxml2-progs}
 %{?with_apidocs:BuildRequires:	libxslt-progs}
 BuildRequires:	pam-devel
 BuildRequires:	perl-tools-pod
@@ -29,7 +29,7 @@ BuildRequires:	polkit-devel >= 0.91
 BuildRequires:	rpmbuild(macros) >= 1.644
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
-Requires:	libfprint >= 0.5.0
+Requires:	libfprint >= 0.6.0
 Requires:	systemd-units >= 38
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -69,7 +69,6 @@ Moduł PAM do uwierzytelniania odciskiem palca.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %configure \
