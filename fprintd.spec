@@ -6,13 +6,14 @@
 Summary:	Daemon to offer libfprint functionality over D-Bus
 Summary(pl.UTF-8):	Demon oferujący funkcjonalność libfprint poprzez D-Bus
 Name:		fprintd
-Version:	0.6.0
+Version:	0.8.1
 Release:	1
 License:	GPL v2+
 Group:		Libraries
-Source0:	http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.xz
-# Source0-md5:	ca61f22513a25020bea7bb96d4322c9d
-URL:		http://www.reactivated.net/fprint/wiki/Fprintd
+#Source0Download: https://gitlab.freedesktop.org/libfprint/fprintd/tags
+Source0:	https://gitlab.freedesktop.org/libfprint/fprintd/uploads/bdd9f91909f535368b7c21f72311704a/%{name}-%{version}.tar.xz
+# Source0-md5:	48017e02e6297f63058d59530862d275
+URL:		https://fprint.freedesktop.org/
 BuildRequires:	dbus-glib-devel
 %{?with_apidocs:BuildRequires:	docbook-dtd412-xml}
 BuildRequires:	gettext-tools
@@ -90,9 +91,6 @@ install -d $RPM_BUILD_ROOT/var/lib/fprint
 
 # to -devel, but we haven't any
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/dbus-1/interfaces/net.reactivated.Fprint.*.xml
-
-%{__mv} $RPM_BUILD_ROOT%{_localedir}/{bg_BG,bg}
-%{__mv} $RPM_BUILD_ROOT%{_localedir}/{fa_IR,fa}
 
 %find_lang %{name}
 
