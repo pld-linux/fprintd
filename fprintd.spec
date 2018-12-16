@@ -7,7 +7,7 @@ Summary:	Daemon to offer libfprint functionality over D-Bus
 Summary(pl.UTF-8):	Demon oferujący funkcjonalność libfprint poprzez D-Bus
 Name:		fprintd
 Version:	0.8.1
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Libraries
 #Source0Download: https://gitlab.freedesktop.org/libfprint/fprintd/tags
@@ -105,7 +105,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/fprintd-enroll
 %attr(755,root,root) %{_bindir}/fprintd-list
 %attr(755,root,root) %{_bindir}/fprintd-verify
-%attr(755,root,root) %{_libdir}/fprintd
+%attr(755,root,root) %{_libexecdir}/fprintd
 /etc/dbus-1/system.d/net.reactivated.Fprint.conf
 %{_datadir}/dbus-1/system-services/net.reactivated.Fprint.service
 %{_datadir}/polkit-1/actions/net.reactivated.fprint.device.policy
