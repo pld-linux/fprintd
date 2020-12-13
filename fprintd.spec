@@ -1,4 +1,3 @@
-# TODO: systemd post/preun
 #
 # Conditional build:
 %bcond_without	apidocs		# do not build and package API docs
@@ -6,13 +5,12 @@
 Summary:	Daemon to offer libfprint functionality over D-Bus
 Summary(pl.UTF-8):	Demon oferujący funkcjonalność libfprint poprzez D-Bus
 Name:		fprintd
-Version:	0.8.1
-Release:	3
+Version:	1.90.8
+Release:	1
 License:	GPL v2+
 Group:		Libraries
-#Source0Download: https://gitlab.freedesktop.org/libfprint/fprintd/tags
-Source0:	https://gitlab.freedesktop.org/libfprint/fprintd/uploads/bdd9f91909f535368b7c21f72311704a/%{name}-%{version}.tar.xz
-# Source0-md5:	48017e02e6297f63058d59530862d275
+Source0:	https://gitlab.freedesktop.org/libfprint/fprintd/-/archive/v%{version}/%{name}-v%{version}.tar.bz2
+# Source0-md5:	94f1760274a6dc95fcd713edc393206b
 URL:		https://fprint.freedesktop.org/
 BuildRequires:	dbus-glib-devel
 %{?with_apidocs:BuildRequires:	docbook-dtd412-xml}
@@ -20,13 +18,18 @@ BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel >= 1:2.26.0
 %{?with_apidocs:BuildRequires:	gtk-doc >= 1.3}
 BuildRequires:	intltool >= 0.35.0
-BuildRequires:	libfprint-devel >= 0.6.0
+BuildRequires:	libfprint-devel >= 1.90.6
 %{?with_apidocs:BuildRequires:	libxml2-progs}
 %{?with_apidocs:BuildRequires:	libxslt-progs}
+BuildRequires:	meson >= 0.47.0
+BuildRequires:	ninja
 BuildRequires:	pam-devel
+BuildRequires:	pam_wrapper
 BuildRequires:	perl-tools-pod
 BuildRequires:	pkgconfig
 BuildRequires:	polkit-devel >= 0.91
+BuildRequires:	python3-dbusmock
+BuildRequires:	python3-pypamtest
 BuildRequires:	rpmbuild(macros) >= 1.644
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
@@ -69,25 +72,19 @@ PAM module for fingerprint authentication.
 Moduł PAM do uwierzytelniania odciskiem palca.
 
 %prep
-%setup -q
+%setup -q -n %{name}-v%{version}
 
 %build
-%configure \
-	--disable-silent-rules \
-	--disable-static \
-	%{?with_apidocs:--enable-gtk-doc --with-html-dir=%{_gtkdocdir}}
+%meson build \
+	-Dgtk_doc=%__true_false apidocs
 
-%{__make} \
-	pammoddir=/%{_lib}/security
+%meson_build -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/var/lib/fprint
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	pammoddir=/%{_lib}/security
 
-%{__rm} $RPM_BUILD_ROOT/%{_lib}/security/pam_fprintd.la
+%meson_install -C build
 
 # to -devel, but we haven't any
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/dbus-1/interfaces/net.reactivated.Fprint.*.xml
@@ -96,6 +93,15 @@ install -d $RPM_BUILD_ROOT/var/lib/fprint
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+%systemd_post fprintd.service
+
+%preun
+%systemd_preun fprintd.service
+
+%postun
+%systemd_reload
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
@@ -106,8 +112,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/fprintd-list
 %attr(755,root,root) %{_bindir}/fprintd-verify
 %attr(755,root,root) %{_libexecdir}/fprintd
-/etc/dbus-1/system.d/net.reactivated.Fprint.conf
 %{_datadir}/dbus-1/system-services/net.reactivated.Fprint.service
+%{_datadir}/dbus-1/system.d/net.reactivated.Fprint.conf
 %{_datadir}/polkit-1/actions/net.reactivated.fprint.device.policy
 %{systemdunitdir}/fprintd.service
 %{_mandir}/man1/fprintd.1*
@@ -117,6 +123,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc pam/README
 %attr(755,root,root) /%{_lib}/security/pam_fprintd.so
+%{_mandir}/man8/pam_fprintd.8*
 
 %if %{with apidocs}
 %files apidocs
