@@ -49,9 +49,7 @@ Summary(pl.UTF-8):	Dokumentacja API biblioteki fprintd
 License:	GFDL v1.1+
 Group:		Documentation
 Requires:	gtk-doc-common
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description apidocs
 API and internal documentation for fprintd library.
